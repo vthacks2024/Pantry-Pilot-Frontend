@@ -42,7 +42,7 @@ struct homePage: View {
                                 Image(systemName: "photo")
                                     .font(.title)
                                     .foregroundColor(.white) // White icon color
-                                Text("Add Image")
+                                Text("Scan Food")
                                     .font(.caption)
                                     .foregroundColor(.white) // White text color
                             }
