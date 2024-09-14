@@ -20,63 +20,76 @@ struct homePage: View {
     @State private var showError = false // Track whether to show error for max images
 
     var body: some View {
-        VStack(spacing: 0) { // Remove spacing between VStack elements
-            // Header
-            Text("Welcome, User")
-                .font(.largeTitle)
-                .padding(.top, 60) // Increased top padding for more margin
+        VStack(spacing: 0) {
+            // Header with background and rounded bottom edges
+            ZStack {
+                // Background with rounded bottom edges
+                RoundedRectangle(cornerRadius: 20, style: .continuous)
+                    .fill(Color.green.opacity(0.6)) // Light green background color
+                    .edgesIgnoringSafeArea(.top)
+                    .frame(height: 140) // Fixed height to contain all elements
 
-            // Tabs
-            HStack {
-                // Tab 1: Images
-                Button(action: {
-                    selectedTab = 0
-                }) {
-                    VStack {
-                        Image(systemName: "photo")
-                            .font(.largeTitle)
-                        Text("Images")
-                            .font(.caption)
-                    }
-                }
-                .foregroundColor(selectedTab == 0 ? .blue : .gray)
-                .frame(maxWidth: .infinity)
+                // Header content (Title and Tabs)
+                VStack {
+                    // Header title
+                    Text("Welcome, User")
+                        .font(.title)
+                        .foregroundColor(.white) // White text color
+                        .padding(.top, 20) // Top padding for title
 
-                // Tab 2: Recipes
-                Button(action: {
-                    selectedTab = 1
-                }) {
-                    VStack {
-                        Image(systemName: "book")
-                            .font(.largeTitle)
-                        Text("Recipes")
-                            .font(.caption)
+                    // Tabs
+                    HStack(spacing: 20) {
+                        // Tab 1: Images
+                        Button(action: {
+                            selectedTab = 0
+                        }) {
+                            VStack {
+                                Image(systemName: "photo")
+                                    .font(.title)
+                                    .foregroundColor(.white) // White icon color
+                                Text("Images")
+                                    .font(.caption)
+                                    .foregroundColor(.white) // White text color
+                            }
+                        }
+                        .frame(maxWidth: .infinity)
+
+                        // Tab 2: Recipes
+                        Button(action: {
+                            selectedTab = 1
+                        }) {
+                            VStack {
+                                Image(systemName: "book")
+                                    .font(.title)
+                                    .foregroundColor(.white) // White icon color
+                                Text("Recipes")
+                                    .font(.caption)
+                                    .foregroundColor(.white) // White text color
+                            }
+                        }
+                        .frame(maxWidth: .infinity)
+
+                        // Tab 3: Diet
+                        Button(action: {
+                            selectedTab = 2
+                        }) {
+                            VStack {
+                                Image(systemName: "leaf")
+                                    .font(.title)
+                                    .foregroundColor(.white) // White icon color
+                                Text("Diet")
+                                    .font(.caption)
+                                    .foregroundColor(.white) // White text color
+                            }
+                        }
+                        .frame(maxWidth: .infinity)
                     }
+                    .padding(.vertical, 10) // Padding for the tabs
                 }
-                .foregroundColor(selectedTab == 1 ? .blue : .gray)
-                .frame(maxWidth: .infinity)
-                
-                // Tab 3: Diet
-                Button(action: {
-                    selectedTab = 2
-                }) {
-                    VStack {
-                        Image(systemName: "leaf")
-                            .font(.largeTitle)
-                        Text("Diet")
-                            .font(.caption)
-                    }
-                }
-                .foregroundColor(selectedTab == 2 ? .blue : .gray)
-                .frame(maxWidth: .infinity)
+                .padding(.horizontal, 20) // Padding on left and right
             }
-            .padding(.top)
+            .padding(.bottom, -10) // Adjusts padding below the header to align with the divider
             
-            // Full-width Divider
-            Divider()
-                .frame(height: 1) // Set the height of the divider
-                .background(Color.gray) // Set the color of the divider to gray
-                .padding(.horizontal, -20) // Extend the divider to cover the entire width
             
             // Content Area Below the Divider
             VStack {
@@ -87,16 +100,20 @@ struct homePage: View {
                     Recipes()
                 } else if selectedTab == 2 {
                     // Content for "Diet" Section
-                    
+                    Text("Diet Section")
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .padding()
         }
-        
-        
     }
 }
 
+
+struct homePage_Previews: PreviewProvider {
+    static var previews: some View {
+        homePage()
+    }
+}
 
 
