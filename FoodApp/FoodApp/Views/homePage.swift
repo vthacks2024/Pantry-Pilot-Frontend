@@ -87,7 +87,7 @@ struct homePage: View {
                     Recipes()
                 } else if selectedTab == 2 {
                     // Content for "Diet" Section
-                    
+                    DietaryRestrictions()
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
