@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CC27A3E92C96192C00DB743A /* Cards.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC27A3E82C96192C00DB743A /* Cards.swift */; };
 		CC3554622C95F8EF00879516 /* FoodAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3554612C95F8EF00879516 /* FoodAppApp.swift */; };
 		CC3554642C95F8EF00879516 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3554632C95F8EF00879516 /* ContentView.swift */; };
 		CC3554662C95F8F000879516 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC3554652C95F8F000879516 /* Assets.xcassets */; };
@@ -20,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CC27A3E82C96192C00DB743A /* Cards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cards.swift; sourceTree = "<group>"; };
 		CC35545E2C95F8EF00879516 /* FoodApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FoodApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC3554612C95F8EF00879516 /* FoodAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodAppApp.swift; sourceTree = "<group>"; };
 		CC3554632C95F8EF00879516 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -64,7 +66,6 @@
 			isa = PBXGroup;
 			children = (
 				DBD3C8252C960D0700A16724 /* Views */,
-				DBD3C8242C960D0000A16724 /* Viewmodels */,
 				DBD3C8232C960CF600A16724 /* Models */,
 				DBD3C8212C960AF100A16724 /* recipeData.json */,
 				CC3554612C95F8EF00879516 /* FoodAppApp.swift */,
@@ -91,18 +92,12 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		DBD3C8242C960D0000A16724 /* Viewmodels */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Viewmodels;
-			sourceTree = "<group>";
-		};
 		DBD3C8252C960D0700A16724 /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				DBD3C8282C960DE100A16724 /* homePage.swift */,
 				DBD3C82A2C9612D800A16724 /* homePageTabs */,
+				CC27A3E82C96192C00DB743A /* Cards.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -191,6 +186,7 @@
 				DBD3C8352C96133E00A16724 /* dietRestrictions.swift in Sources */,
 				DBD3C8362C96133E00A16724 /* recipes.swift in Sources */,
 				DBD3C8272C960D4900A16724 /* recipeCard.swift in Sources */,
+				CC27A3E92C96192C00DB743A /* Cards.swift in Sources */,
 				DBD3C8342C96133E00A16724 /* addImage.swift in Sources */,
 				CC3554642C95F8EF00879516 /* ContentView.swift in Sources */,
 				CC3554622C95F8EF00879516 /* FoodAppApp.swift in Sources */,
