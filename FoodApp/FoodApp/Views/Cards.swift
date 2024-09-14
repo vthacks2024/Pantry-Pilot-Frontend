@@ -6,7 +6,8 @@ struct CustomCardView: View {
     var height: CGFloat
     var backgroundColor: Color
     var cornerRadius: CGFloat
-    var text: String
+    var title: String
+    var caption: String
     var imageURL: String // URL string for the image to display on the card
 
     var body: some View {
@@ -51,11 +52,18 @@ struct CustomCardView: View {
                     .fill(Color.white)
                     .frame(height: height / 4) // Make the bar occupy 1/4 of the card height
                     .overlay(
-                        Text(text)
+                        Text(title)
                             .font(.headline)
                             .padding()
                             .foregroundColor(.black),
-                        alignment: .center
+                        alignment: .leading
+                    )
+                    .overlay(
+                        Text(caption)
+                            .font(.caption)
+                            .padding()
+                            .foregroundColor(.gray),
+                        alignment: .trailing
                     )
             }
             .frame(width: width, height: height)
