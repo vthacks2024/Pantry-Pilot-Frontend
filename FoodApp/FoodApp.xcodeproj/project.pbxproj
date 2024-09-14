@@ -14,7 +14,6 @@
 		CC3554662C95F8F000879516 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC3554652C95F8F000879516 /* Assets.xcassets */; };
 		CC3554692C95F8F000879516 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC3554682C95F8F000879516 /* Preview Assets.xcassets */; };
 		DBD3C8222C960AF100A16724 /* recipeData.json in Resources */ = {isa = PBXBuildFile; fileRef = DBD3C8212C960AF100A16724 /* recipeData.json */; };
-		DBD3C8272C960D4900A16724 /* recipeCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBD3C8262C960D4900A16724 /* recipeCard.swift */; };
 		DBD3C8292C960DE100A16724 /* homePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBD3C8282C960DE100A16724 /* homePage.swift */; };
 		DBD3C8342C96133E00A16724 /* addImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBD3C8312C96133E00A16724 /* addImage.swift */; };
 		DBD3C8352C96133E00A16724 /* dietRestrictions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBD3C8322C96133E00A16724 /* dietRestrictions.swift */; };
@@ -30,7 +29,6 @@
 		CC3554652C95F8F000879516 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CC3554682C95F8F000879516 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		DBD3C8212C960AF100A16724 /* recipeData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = recipeData.json; sourceTree = "<group>"; };
-		DBD3C8262C960D4900A16724 /* recipeCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = recipeCard.swift; sourceTree = "<group>"; };
 		DBD3C8282C960DE100A16724 /* homePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = homePage.swift; sourceTree = "<group>"; };
 		DBD3C8312C96133E00A16724 /* addImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = addImage.swift; sourceTree = "<group>"; };
 		DBD3C8322C96133E00A16724 /* dietRestrictions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = dietRestrictions.swift; sourceTree = "<group>"; };
@@ -89,7 +87,6 @@
 		DBD3C8232C960CF600A16724 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				DBD3C8262C960D4900A16724 /* recipeCard.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
