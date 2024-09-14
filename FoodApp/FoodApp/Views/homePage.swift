@@ -4,20 +4,15 @@
 //
 //  Created by vthacks on 9/14/24.
 //
-
-import Foundation
-
 import SwiftUI
-import PhotosUI
 import UIKit
 
 struct homePage: View {
-    @State private var selectedTab = 0 // Track selected tab
+    @State private var selectedTab = 1 // Track selected tab
     @State private var isImagePickerPresented = false // Track whether the image picker is presented
     @State private var isCameraPickerPresented = false // Track whether the camera picker is presented
-    @State private var selectedImages: [UIImage] = [] // Store up to 5 selected images
+    @State private var selectedImage: UIImage? // Store the selected image
     @State private var showImageSourceOptions = false // Track whether to show image source options
-    @State private var showError = false // Track whether to show error for max images
 
     var body: some View {
         VStack(spacing: 0) {
@@ -41,13 +36,13 @@ struct homePage: View {
                     HStack(spacing: 20) {
                         // Tab 1: Images
                         Button(action: {
-                            selectedTab = 0
+                            showImageSourceOptions = true // Show action sheet for image source options
                         }) {
                             VStack {
                                 Image(systemName: "photo")
                                     .font(.title)
                                     .foregroundColor(.white) // White icon color
-                                Text("Images")
+                                Text("Add Image")
                                     .font(.caption)
                                     .foregroundColor(.white) // White text color
                             }
@@ -90,31 +85,72 @@ struct homePage: View {
             }
             .padding(.bottom, -10) // Adjusts padding below the header to align with the divider
             
-            
             // Content Area Below the Divider
             VStack {
-                if selectedTab == 0 {
-                    AddImage()
-                } else if selectedTab == 1 {
+                if selectedTab == 1 {
                     // Content for "Recipes" Section
                     Recipes()
                 } else if selectedTab == 2 {
                     // Content for "Diet" Section
                     DietaryRestrictions()
-
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .padding()
         }
+        .actionSheet(isPresented: $showImageSourceOptions) { // Action sheet to choose image source
+            ActionSheet(
+                title: Text("Choose Image Source"),
+                message: Text("Select an image from your photo library or take a new one."),
+                buttons: [
+                    .default(Text("Camera")) {
+                        isImagePickerPresented = true
+                        isCameraPickerPresented = true // Set the source type to camera
+                    },
+                    .default(Text("Photo Library")) {
+                        isImagePickerPresented = true
+                        isCameraPickerPresented = false // Set the source type to photo library
+                    },
+                    .cancel()
+                ]
+            )
+        }
+        .sheet(isPresented: $isImagePickerPresented) { // Present the image picker sheet
+            CustomImagePicker(selectedImage: $selectedImage, sourceType: isCameraPickerPresented ? .camera : .photoLibrary)
+        }
     }
 }
 
+// Custom Image Picker using UIImagePickerController
+struct CustomImagePicker: UIViewControllerRepresentable {
+    @Binding var selectedImage: UIImage? // Bind the selected image
+    var sourceType: UIImagePickerController.SourceType // Source type (camera or photo library)
 
-struct homePage_Previews: PreviewProvider {
-    static var previews: some View {
-        homePage()
+    func makeUIViewController(context: Context) -> UIImagePickerController {
+        let picker = UIImagePickerController()
+        picker.sourceType = sourceType
+        picker.delegate = context.coordinator
+        return picker
+    }
+
+    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+
+    class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+        var parent: CustomImagePicker
+
+        init(_ parent: CustomImagePicker) {
+            self.parent = parent
+        }
+
+        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+            if let image = info[.originalImage] as? UIImage {
+                parent.selectedImage = image // Update the selected image
+            }
+            picker.dismiss(animated: true)
+        }
     }
 }
-
-
