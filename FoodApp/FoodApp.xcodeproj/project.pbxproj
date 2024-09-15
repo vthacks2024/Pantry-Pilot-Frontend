@@ -10,6 +10,8 @@
 		CC27A3E92C96192C00DB743A /* Cards.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC27A3E82C96192C00DB743A /* Cards.swift */; };
 		CC27A3EB2C961DCA00DB743A /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC27A3EA2C961DCA00DB743A /* Header.swift */; };
 		CC27A3EF2C965BAA00DB743A /* RecipeDetailedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC27A3EE2C965BAA00DB743A /* RecipeDetailedView.swift */; };
+		CC27A3F12C96761600DB743A /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC27A3F02C96761600DB743A /* WelcomeView.swift */; };
+		CC27A3FD2C9687FB00DB743A /* Oswald-VariableFont_wght.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CC27A3FC2C9687FB00DB743A /* Oswald-VariableFont_wght.ttf */; };
 		CC3554622C95F8EF00879516 /* FoodAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3554612C95F8EF00879516 /* FoodAppApp.swift */; };
 		CC3554642C95F8EF00879516 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3554632C95F8EF00879516 /* ContentView.swift */; };
 		CC3554662C95F8F000879516 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC3554652C95F8F000879516 /* Assets.xcassets */; };
@@ -24,6 +26,12 @@
 		CC27A3E82C96192C00DB743A /* Cards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cards.swift; sourceTree = "<group>"; };
 		CC27A3EA2C961DCA00DB743A /* Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
 		CC27A3EE2C965BAA00DB743A /* RecipeDetailedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailedView.swift; sourceTree = "<group>"; };
+		CC27A3F02C96761600DB743A /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
+		CC27A3F52C96820F00DB743A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CC27A3F72C96839800DB743A /* STYLU.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; name = STYLU.TTF; path = ../../../../../../Downloads/STYLU.TTF; sourceTree = "<group>"; };
+		CC27A3F82C9683A900DB743A /* STYLU.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; name = STYLU.TTF; path = ../../../../../../Downloads/STYLU.TTF; sourceTree = "<group>"; };
+		CC27A3FA2C96847A00DB743A /* Manrope-VariableFont_wght.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Manrope-VariableFont_wght.ttf"; sourceTree = "<group>"; };
+		CC27A3FC2C9687FB00DB743A /* Oswald-VariableFont_wght.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Oswald-VariableFont_wght.ttf"; sourceTree = "<group>"; };
 		CC35545E2C95F8EF00879516 /* FoodApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FoodApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC3554612C95F8EF00879516 /* FoodAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodAppApp.swift; sourceTree = "<group>"; };
 		CC3554632C95F8EF00879516 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -65,10 +73,13 @@
 		CC3554602C95F8EF00879516 /* FoodApp */ = {
 			isa = PBXGroup;
 			children = (
+				CC27A3F52C96820F00DB743A /* Info.plist */,
 				DBD3C8252C960D0700A16724 /* Views */,
 				DBD3C8212C960AF100A16724 /* recipeData.json */,
 				CC3554612C95F8EF00879516 /* FoodAppApp.swift */,
 				CC3554632C95F8EF00879516 /* ContentView.swift */,
+				CC27A3FA2C96847A00DB743A /* Manrope-VariableFont_wght.ttf */,
+				CC27A3FC2C9687FB00DB743A /* Oswald-VariableFont_wght.ttf */,
 				CC3554652C95F8F000879516 /* Assets.xcassets */,
 				CC3554672C95F8F000879516 /* Preview Content */,
 			);
@@ -78,6 +89,8 @@
 		CC3554672C95F8F000879516 /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
+				CC27A3F72C96839800DB743A /* STYLU.TTF */,
+				CC27A3F82C9683A900DB743A /* STYLU.TTF */,
 				CC3554682C95F8F000879516 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
@@ -91,6 +104,7 @@
 				CC27A3E82C96192C00DB743A /* Cards.swift */,
 				CC27A3EA2C961DCA00DB743A /* Header.swift */,
 				CC27A3EE2C965BAA00DB743A /* RecipeDetailedView.swift */,
+				CC27A3F02C96761600DB743A /* WelcomeView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -164,6 +178,7 @@
 			files = (
 				DBD3C8222C960AF100A16724 /* recipeData.json in Resources */,
 				CC3554692C95F8F000879516 /* Preview Assets.xcassets in Resources */,
+				CC27A3FD2C9687FB00DB743A /* Oswald-VariableFont_wght.ttf in Resources */,
 				CC3554662C95F8F000879516 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -179,6 +194,7 @@
 				CC27A3EB2C961DCA00DB743A /* Header.swift in Sources */,
 				CC27A3EF2C965BAA00DB743A /* RecipeDetailedView.swift in Sources */,
 				DBD3C8362C96133E00A16724 /* recipes.swift in Sources */,
+				CC27A3F12C96761600DB743A /* WelcomeView.swift in Sources */,
 				CC27A3E92C96192C00DB743A /* Cards.swift in Sources */,
 				CC3554642C95F8EF00879516 /* ContentView.swift in Sources */,
 				CC3554622C95F8EF00879516 /* FoodAppApp.swift in Sources */,
