@@ -2,7 +2,8 @@ import SwiftUI
 import PhotosUI
 import UIKit
 
-struct homePage: View {
+struct HomePage: View {
+    let userName: String
     @State private var selectedTab = 1 // Track selected tab
     @State private var isImagePickerPresented = false // Track whether the image picker is presented
     @State private var isCameraPickerPresented = false // Track whether the camera picker is presented
@@ -11,7 +12,9 @@ struct homePage: View {
     @State private var showError = false // Track whether to show error for max images
     
     // New state variables for handling recipe detail view
-    @State private var selectedRecipe: Recipe? // Track the selected recipe
+        @State private var selectedRecipe: Recipe? // Track the selected recipe
+        @State private var isDetailPresented = false // State to control presentation of RecipeDetailView
+
 
     var body: some View {
         NavigationView {
@@ -27,7 +30,7 @@ struct homePage: View {
                     // Header content (Title and Tabs)
                     VStack {
                         // Header title
-                        Text("Welcome, User")
+                        Text("Welcome, \(userName)")
                             .font(.title)
                             .foregroundColor(.white) // White text color
                             .padding(.top, 20) // Top padding for title
@@ -89,7 +92,7 @@ struct homePage: View {
                 VStack {
                      if selectedTab == 1 {
                         // Content for "Recipes" Section
-                        Recipes(selectedRecipe: $selectedRecipe)
+                         Recipes(selectedRecipe: $selectedRecipe)
                     } else if selectedTab == 2 {
                         // Content for "Diet" Section
                         DietaryRestrictions()
@@ -99,31 +102,34 @@ struct homePage: View {
                 .padding()
             }
             .actionSheet(isPresented: $showImageSourceOptions) { // Action sheet to choose image source
-                ActionSheet(
-                    title: Text("Choose Image Source"),
-                    message: Text("Select an image from your photo library or take a new one."),
-                    buttons: [
-                        .default(Text("Camera")) {
-                            isImagePickerPresented = true
-                            isCameraPickerPresented = true // Set the source type to camera
-                        },
-                        .default(Text("Photo Library")) {
-                            isImagePickerPresented = true
-                            isCameraPickerPresented = false // Set the source type to photo library
-                        },
-                        .cancel()
-                    ]
-                )
-            }
+                        ActionSheet(
+                            title: Text("Choose Image Source"),
+                            message: Text("Select an image from your photo library or take a new one."),
+                            buttons: [
+                                .default(Text("Camera")) {
+                                    isImagePickerPresented = true
+                                    isCameraPickerPresented = true // Set the source type to camera
+                                },
+                                .default(Text("Photo Library")) {
+                                    isImagePickerPresented = true
+                                    isCameraPickerPresented = false // Set the source type to photo library
+                                },
+                                .cancel()
+                            ]
+                        )
+                    }
             .sheet(isPresented: $isImagePickerPresented) { // Present the image picker sheet
-                CustomImagePicker(selectedImage: $selectedImage, sourceType: isCameraPickerPresented ? .camera : .photoLibrary)
+                            CustomImagePicker(selectedImage: $selectedImage, sourceType: isCameraPickerPresented ? .camera : .photoLibrary)
+                        }
+            .fullScreenCover(isPresented: $isDetailPresented) { // Present the RecipeDetailView in full screen
+                if let recipe = selectedRecipe {
+                    RecipeDetailView(recipeName: recipe.title, imageURL: recipe.imageURL)
+                }
             }
-            .navigationBarHidden(true) // Hide the default navigation bar to keep the custom header
+                        .navigationBarHidden(true)
         }
     }
 }
-
-
 // Custom Image Picker using UIImagePickerController
 struct CustomImagePicker: UIViewControllerRepresentable {
     @Binding var selectedImage: UIImage? // Bind the selected image
@@ -341,16 +347,11 @@ struct CustomImagePicker: UIViewControllerRepresentable {
 
 
 
-
-
 //struct homePage_Previews: PreviewProvider {
 //    static var previews: some View {
-//        homePage()
+//        HomePage(userName: String)
 //    }
 //}
-
-
-import Foundation
 
 import Foundation
 
@@ -360,4 +361,5 @@ struct Recipe: Identifiable, Codable {
     let caption: String
     let imageURL: String
 }
+
 
