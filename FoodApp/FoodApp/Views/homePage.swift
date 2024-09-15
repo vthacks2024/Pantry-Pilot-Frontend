@@ -45,7 +45,7 @@ struct HomePage: View {
                                     Image(systemName: "photo")
                                         .font(.title)
                                         .foregroundColor(.white) // White icon color
-                                    Text("Images")
+                                    Text("Scan Food")
                                         .font(.caption)
                                         .foregroundColor(.white) // White text color
                                 }
@@ -158,36 +158,208 @@ struct CustomImagePicker: UIViewControllerRepresentable {
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
             if let image = info[.originalImage] as? UIImage {
                 parent.selectedImage = image // Update the selected image
-                saveImageToDocuments(image) // Save the image to documents directory
+                uploadImage(image) // Call the function to upload the image
             }
             picker.dismiss(animated: true)
         }
         
-        // Function to save the image to the document directory
-        func saveImageToDocuments(_ image: UIImage) {
-            guard let data = image.jpegData(compressionQuality: 1) else { return } // Convert UIImage to JPEG data
+        
+        func uploadImage(_ image: UIImage) {
+            // Resize the image to ensure it is less than 4 MB
+            let resizedImage = resizeImage(image, targetSize: CGSize(width: 1024, height: 1024))
             
-            // Get the document directory path
-            let filename = getDocumentsDirectory().appendingPathComponent("uploadedImage.jpg")
-            
-            do {
-                try data.write(to: filename) // Write the image data to the file path
-                print("Image saved successfully at \(filename)")
-            } catch {
-                print("Failed to save image: \(error.localizedDescription)")
+            guard let imageData = resizedImage.jpegData(compressionQuality: 0.7) else {
+                print("Error: Unable to convert UIImage to JPEG data.")
+                return
             }
+
+            let url = URL(string: "https://vthacks2024backend.onrender.com/api/upload-image")!
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            
+            let boundary = UUID().uuidString
+            request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+            
+            var body = Data()
+            
+            // Add image data to the request body
+            body.append("--\(boundary)\r\n".data(using: .utf8)!)
+            body.append("Content-Disposition: form-data; name=\"file\"; filename=\"uploadedImage.jpg\"\r\n".data(using: .utf8)!)
+            body.append("Content-Type: image/jpeg\r\n\r\n".data(using: .utf8)!)
+            body.append(imageData)
+            body.append("\r\n".data(using: .utf8)!)
+            
+            // Load and clear dietary restrictions from file
+            let dietaryRestrictions = loadDietaryRestrictions()
+            //clearDietaryRestrictions()
+            
+            // Add dietary restrictions to the request body
+            for restriction in dietaryRestrictions {
+                body.append("--\(boundary)\r\n".data(using: .utf8)!)
+                body.append("Content-Disposition: form-data; name=\"dietary_restrictions[]\"\r\n".data(using: .utf8)!)
+                body.append("\r\n".data(using: .utf8)!)
+                body.append(restriction.data(using: .utf8)!)
+                body.append("\r\n".data(using: .utf8)!)
+            }
+            
+            body.append("--\(boundary)--\r\n".data(using: .utf8)!)
+            
+            let task = URLSession.shared.uploadTask(with: request, from: body) { data, response, error in
+                if let error = error {
+                    print("Error uploading image: \(error)")
+                    return
+                }
+                
+                guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+                    print("Server error or unexpected response.")
+                    return
+                }
+                
+                if let data = data, let responseString = String(data: data, encoding: .utf8) {
+                    // Print the server response
+                    print("Server response: \(responseString)")
+                    
+                    // Parse the server response into Recipe structure
+                    if let serverResponse = try? JSONDecoder().decode(ServerResponse.self, from: data) {
+                        let newRecipe = Recipe(
+                            title: serverResponse.result ?? "Unknown Title",
+                            caption: serverResponse.result ?? "No caption provided",
+                            imageURL: serverResponse.image_url ?? ""
+                        )
+                        
+                        // Load existing recipes, append the new recipe, and save
+                        var existingRecipes = self.loadRecipesFromFile()
+                        existingRecipes.append(newRecipe)
+                        self.saveRecipesToFile(existingRecipes)
+                        
+                        // Load and print the saved recipes
+                        let savedRecipes = self.loadRecipesFromFile()
+                        print("Saved Recipes: \(savedRecipes)")
+                    } else {
+                        print("Error parsing server response.")
+                    }
+                }
+            }
+            task.resume()
+        }
+        
+        struct ServerResponse: Codable {
+            let image_url: String?
+            let result: String?
         }
 
-        // Function to get the document directory path
-        func getDocumentsDirectory() -> URL {
-            FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        
+        func saveRecipesToFile(_ recipes: [Recipe]) {
+            let fileManager = FileManager.default
+            guard let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+            let fileURL = documentsURL.appendingPathComponent("recipes.json")
+            
+            do {
+                // Encode the recipes array to JSON data
+                let data = try JSONEncoder().encode(recipes)
+                // Write the JSON data to the file
+                try data.write(to: fileURL)
+                print("Recipes saved successfully.")
+            } catch {
+                print("Error saving recipes: \(error.localizedDescription)")
+            }
+        }
+        
+        func loadRecipesFromFile() -> [Recipe] {
+            let fileManager = FileManager.default
+            guard let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else { return [] }
+            let fileURL = documentsURL.appendingPathComponent("recipes.json")
+            
+            do {
+                // Check if the file exists
+                if fileManager.fileExists(atPath: fileURL.path) {
+                    // Load the JSON data from the file
+                    let data = try Data(contentsOf: fileURL)
+                    // Decode the JSON data to an array of Recipe objects
+                    let recipes = try JSONDecoder().decode([Recipe].self, from: data)
+                    return recipes
+                } else {
+                    print("No recipes file found.")
+                    return []
+                }
+            } catch {
+                print("Error loading recipes: \(error.localizedDescription)")
+                return []
+            }
+        }
+        func clearDietaryRestrictions() {
+            let fileManager = FileManager.default
+            guard let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+            let fileURL = documentsURL.appendingPathComponent("dietary_restrictions.json")
+            
+            // Clear or reset the file content
+            do {
+                try "".write(to: fileURL, atomically: true, encoding: .utf8)
+                print("Dietary restrictions file cleared.")
+            } catch {
+                print("Error clearing dietary restrictions file: \(error.localizedDescription)")
+            }
+        }
+        
+    
+
+
+        func resizeImage(_ image: UIImage, targetSize: CGSize) -> UIImage {
+            let size = image.size
+            
+            let widthRatio  = targetSize.width  / image.size.width
+            let heightRatio = targetSize.height / image.size.height
+            
+            // Determine what our new size will be
+            var newSize: CGSize
+            if widthRatio > heightRatio {
+                newSize = CGSize(width: size.width * heightRatio, height: size.height * heightRatio)
+            } else {
+                newSize = CGSize(width: size.width * widthRatio, height: size.height * widthRatio)
+            }
+            
+            // Resize the image
+            UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
+            image.draw(in: CGRect(origin: .zero, size: newSize))
+            let newImage = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            
+            return newImage!
+        }
+        
+        func loadDietaryRestrictions() -> [String] {
+            let fileManager = FileManager.default
+            guard let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else { return [] }
+            let fileURL = documentsURL.appendingPathComponent("restrictions.json")
+            
+            // Load existing data from the file if it exists
+            if let data = try? Data(contentsOf: fileURL),
+               let decoded = try? JSONDecoder().decode([String].self, from: data) {
+                return decoded
+            }
+            
+            // Return an empty array if the file does not exist or is empty
+            return []
         }
     }
 }
+
+
+
 
 //struct homePage_Previews: PreviewProvider {
 //    static var previews: some View {
 //        HomePage(userName: String)
 //    }
 //}
+
+import Foundation
+
+struct Recipe: Identifiable, Codable {
+    let id = UUID() // Unique identifier for each recipe
+    let title: String
+    let caption: String
+    let imageURL: String
+}
+
 

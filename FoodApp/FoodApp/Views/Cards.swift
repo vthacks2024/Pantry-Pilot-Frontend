@@ -58,13 +58,13 @@ struct CustomCardView: View {
                             .foregroundColor(.black),
                         alignment: .leading
                     )
-                    .overlay(
-                        Text(caption)
-                            .font(.caption)
-                            .padding()
-                            .foregroundColor(.gray),
-                        alignment: .trailing
-                    )
+                    //.overlay(
+                        //Text(caption)
+                          //  .font(.caption)
+                            //.padding()
+                            //.foregroundColor(.gray),
+                        //alignment: .trailing
+                    //)
             }
             .frame(width: width, height: height)
             .cornerRadius(cornerRadius)
