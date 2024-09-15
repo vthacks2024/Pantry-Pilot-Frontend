@@ -185,7 +185,7 @@ struct CustomImagePicker: UIViewControllerRepresentable {
             
             // Load and clear dietary restrictions from file
             let dietaryRestrictions = loadDietaryRestrictions()
-            clearDietaryRestrictions()
+            //clearDietaryRestrictions()
             
             // Add dietary restrictions to the request body
             for restriction in dietaryRestrictions {
@@ -324,7 +324,7 @@ struct CustomImagePicker: UIViewControllerRepresentable {
         func loadDietaryRestrictions() -> [String] {
             let fileManager = FileManager.default
             guard let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else { return [] }
-            let fileURL = documentsURL.appendingPathComponent("restrctions.json")
+            let fileURL = documentsURL.appendingPathComponent("restrictions.json")
             
             // Load existing data from the file if it exists
             if let data = try? Data(contentsOf: fileURL),

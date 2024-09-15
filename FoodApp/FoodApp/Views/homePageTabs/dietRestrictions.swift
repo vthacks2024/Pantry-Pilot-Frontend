@@ -92,6 +92,15 @@ struct DietaryRestrictions: View {
                             CheckboxView(isSelected: selectedOptions.wrappedValue.contains(option)) {}
                             Text(option)
                                 .padding(.leading)
+                                .onTapGesture {
+                                    // Toggle selection when text is clicked
+                                    if selectedOptions.wrappedValue.contains(option) {
+                                        selectedOptions.wrappedValue.removeAll { $0 == option }
+                                    } else {
+                                        selectedOptions.wrappedValue.append(option)
+                                    }
+                                    saveRestrictions() // Save changes
+                                }
                         }
                     }
                 }
@@ -108,6 +117,13 @@ struct DietaryRestrictions: View {
         var body: some View {
             Button(action: action) {
                 Image(systemName: isSelected ? "checkmark.square" : "square")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 20, height: 20)
+                    .foregroundColor(isSelected ? .black : .white) // Text color for selected state
+                    .background(Color.white) // Background color for the checkbox
+                    .border(Color.black, width: 1) // Border color and width
+                    .shadow(radius: 2) // Shadow for the checkbox
             }
             .buttonStyle(BorderlessButtonStyle())
         }
@@ -115,8 +131,14 @@ struct DietaryRestrictions: View {
     
     // Function to save restrictions to a JSON file
     private func saveRestrictions() {
-        let allRestrictions = selectedOptions1 + selectedOptions2 + selectedOptions3 + selectedOptions4
-        let jsonData = try? JSONEncoder().encode(allRestrictions)
+        let restrictions = [
+            "Allergies": selectedOptions1,
+            "Ingredient-Free": selectedOptions2,
+            "Diet Options": selectedOptions3,
+            "Fitness Diets": selectedOptions4
+        ]
+        
+        let jsonData = try? JSONEncoder().encode(restrictions)
         
         if let data = jsonData {
             let filename = getDocumentsDirectory().appendingPathComponent("dietary_restrictions.json")
@@ -135,12 +157,12 @@ struct DietaryRestrictions: View {
         
         do {
             let data = try Data(contentsOf: filename)
-            if let loadedRestrictions = try? JSONDecoder().decode([String].self, from: data) {
+            if let loadedRestrictions = try? JSONDecoder().decode([String: [String]].self, from: data) {
                 // Split loaded restrictions back into categories
-                selectedOptions1 = loadedRestrictions.filter { options1.contains($0) }
-                selectedOptions2 = loadedRestrictions.filter { options2.contains($0) }
-                selectedOptions3 = loadedRestrictions.filter { options3.contains($0) }
-                selectedOptions4 = loadedRestrictions.filter { options4.contains($0) }
+                selectedOptions1 = loadedRestrictions["Allergies"] ?? []
+                selectedOptions2 = loadedRestrictions["Ingredient-Free"] ?? []
+                selectedOptions3 = loadedRestrictions["Diet Options"] ?? []
+                selectedOptions4 = loadedRestrictions["Fitness Diets"] ?? []
                 
                 print("Restrictions loaded successfully.")
             }

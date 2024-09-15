@@ -47,8 +47,13 @@ struct Recipes: View {
         do {
             let data = try Data(contentsOf: fileURL)
             let decoder = JSONDecoder()
-            loadedRecipes = try decoder.decode([Recipe].self, from: data)
-
+            var recipes = try decoder.decode([Recipe].self, from: data)
+            
+            // Reverse the array to display the latest item first
+            recipes.reverse()
+            
+            loadedRecipes = recipes
+            
             print("Recipes loaded successfully!")
             for recipe in loadedRecipes {
                 print("Title: \(recipe.title), ImageURL: \(recipe.imageURL)")
